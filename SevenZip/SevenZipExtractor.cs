@@ -760,7 +760,7 @@ namespace SevenZip
             _archiveFileData = null;
             _archiveProperties = null;
             _archiveFileInfoCollection = null;
-            _inStream.Dispose();
+            _inStream?.Dispose();
             _inStream = null;
             if (_openCallback != null)
             {
