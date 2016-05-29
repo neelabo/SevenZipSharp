@@ -97,6 +97,11 @@ namespace SevenZip
         /// <remarks><a href="http://en.wikipedia.org/wiki/Rar">Wikipedia information</a></remarks>
         Rar,
         /// <summary>
+        /// RarLab Rar 5.0 archive format.
+        /// </summary>
+        /// <remarks><a href="http://en.wikipedia.org/wiki/Rar">Wikipedia information</a></remarks>
+        Rar5,
+        /// <summary>
         /// Open Rpm software package format.
         /// </summary>
         /// <remarks><a href="http://en.wikipedia.org/wiki/RPM_Package_Manager">Wikipedia information</a></remarks>
@@ -340,6 +345,7 @@ namespace SevenZip
                 {InArchiveFormat.Lzma,      new Guid("23170f69-40c1-278a-1000-0001100a0000")},
                 {InArchiveFormat.Nsis,      new Guid("23170f69-40c1-278a-1000-000110090000")},
                 {InArchiveFormat.Rar,       new Guid("23170f69-40c1-278a-1000-000110030000")},
+                {InArchiveFormat.Rar5,      new Guid("23170f69-40c1-278a-1000-000110cc0000")},
                 {InArchiveFormat.Rpm,       new Guid("23170f69-40c1-278a-1000-000110eb0000")},
                 {InArchiveFormat.Split,     new Guid("23170f69-40c1-278a-1000-000110ea0000")},
                 {InArchiveFormat.Tar,       new Guid("23170f69-40c1-278a-1000-000110ee0000")},
@@ -464,6 +470,7 @@ namespace SevenZip
             {"75-73-74-61-72",                                                  InArchiveFormat.Tar},
             //257 byte offset
             {"52-61-72-21-1A-07-00",                                            InArchiveFormat.Rar},
+            {"52-61-72-21-1A-07-01-00",                                         InArchiveFormat.Rar5},
             {"50-4B-03-04",								                        InArchiveFormat.Zip},
             {"5D-00-00-40-00",							                        InArchiveFormat.Lzma},
             {"2D-6C-68",								                            InArchiveFormat.Lzh},
