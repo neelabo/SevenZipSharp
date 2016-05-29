@@ -1,3 +1,10 @@
+This is a fork from https://github.com/tomap/SevenZipSharp
+
+Here are the main differences:
+* RAR5 format Supprt
+
+-------------------------------------------------------------
+
 This is a fork from Codeplex original project.
 
 Here are the main differences:
