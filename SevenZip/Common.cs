@@ -696,6 +696,16 @@ Dispatcher == null
         {
             return !afi1.Equals(afi2);
         }
+
+        /// <summary>
+        /// Get Temporaly FileName.
+        /// </summary>
+        /// <returns></returns>
+        public string GetTempFileName()
+        {
+            var extension = this.IsDirectory ? "\\" :  System.IO.Path.GetExtension(this.FileName);
+            return $"{this.Index:000000}{extension}";
+        }
     }
 
     /// <summary>

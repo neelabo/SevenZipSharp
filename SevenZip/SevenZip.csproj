@@ -146,6 +146,7 @@
     <Compile Include="SevenZipCompressorAsynchronous.cs" />
     <Compile Include="SevenZipExtractor.cs" />
     <Compile Include="SevenZipExtractorAsynchronous.cs" />
+    <Compile Include="SevenZipExtractorTemp.cs" />
     <Compile Include="SevenZipSfx.cs" />
     <Compile Include="StreamWrappers.cs" />
   </ItemGroup>
