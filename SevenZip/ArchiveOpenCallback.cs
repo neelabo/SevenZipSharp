@@ -94,6 +94,26 @@ namespace SevenZip
             Init(fileName);
         }
 
+        /// <summary>
+        /// Reset multi volume info.
+        /// </summary>
+        public void ResetMultiVolume()
+        {
+            if (_volumeFileNames.Count > 1)
+            {
+                var first = _volumeFileNames[0];
+                _volumeFileNames.Clear();
+                _volumeFileNames.Add(first);
+
+                foreach (InStreamWrapper wrap in _wrappers.Values)
+                {
+                    wrap.Dispose();
+                }
+                _wrappers = new Dictionary<string, InStreamWrapper>();
+            }
+        }
+
+
         #region IArchiveOpenCallback Members
 
         public void SetTotal(IntPtr files, IntPtr bytes) {}

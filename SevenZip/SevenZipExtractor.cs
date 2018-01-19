@@ -452,6 +452,7 @@ namespace SevenZip
         {
             if (!_opened)
             {
+                openCallback.ResetMultiVolume();
                 if (OpenArchiveInner(archiveStream, openCallback) != OperationResult.Ok)
                 {
                     if (!ThrowException(null, new SevenZipArchiveException()))
