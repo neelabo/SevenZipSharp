@@ -18,6 +18,7 @@ using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
+using System.Linq;
 using System.Runtime.InteropServices;
 using System.Security.Permissions;
 #if !WINCE
@@ -453,6 +454,10 @@ namespace SevenZip
         /// </summary>
         NoProperty = 0,
         /// <summary>
+        /// (?)
+        /// </summary>
+        MainSubfile,
+        /// <summary>
         /// Handler item index
         /// </summary>
         HandlerItemIndex = 2,
@@ -635,7 +640,43 @@ namespace SevenZip
         /// <summary>
         /// (?)
         /// </summary>
-        TotalSize = 0x1100,
+        Characts,
+        /// <summary>
+        /// (?)
+        /// </summary>
+        Va,
+        /// <summary>
+        /// (?)
+        /// </summary>
+        Id,
+        /// <summary>
+        /// (?)
+        /// </summary>
+        ShortName,
+        /// <summary>
+        /// (?)
+        /// </summary>
+        CreatorApp,
+        /// <summary>
+        /// (?)
+        /// </summary>
+        SectorSize,
+        /// <summary>
+        /// (?)
+        /// </summary>
+        PosixAttrib,
+        /// <summary>
+        /// (?)
+        /// </summary>
+        SymLink,
+        /// <summary>
+        /// (?)
+        /// </summary>
+        Error,
+        /// <summary>
+        /// (?)
+        /// </summary>
+        TotalSize,
         /// <summary>
         /// (?)
         /// </summary>
@@ -651,11 +692,148 @@ namespace SevenZip
         /// <summary>
         /// Local item name(?); usually absent
         /// </summary>
-        LocalName = 0x1200,
+        LocalName,
         /// <summary>
         /// (?)
         /// </summary>
         Provider,
+        /// <summary>
+        /// (?)
+        /// </summary>
+        NtSecure,
+        /// <summary>
+        /// (?)
+        /// </summary>
+        IsAltStream,
+        /// <summary>
+        /// (?)
+        /// </summary>
+        IsAux,
+        /// <summary>
+        /// (?)
+        /// </summary>
+        IsDeleted,
+        /// <summary>
+        /// (?)
+        /// </summary>
+        IsTree,
+        /// <summary>
+        /// (?)
+        /// </summary>
+        Sha1,
+        /// <summary>
+        /// (?)
+        /// </summary>
+        Sha256,
+        /// <summary>
+        /// (?)
+        /// </summary>
+        ErrorType,
+        /// <summary>
+        /// (?)
+        /// </summary>
+        NumErrors,
+        /// <summary>
+        /// (?)
+        /// </summary>
+        ErrorFlags,
+        /// <summary>
+        /// (?)
+        /// </summary>
+        WarningFlags,
+        /// <summary>
+        /// (?)
+        /// </summary>
+        Warning,
+        /// <summary>
+        /// (?)
+        /// </summary>
+        NumStreams,
+        /// <summary>
+        /// (?)
+        /// </summary>
+        NumAltStreams,
+        /// <summary>
+        /// (?)
+        /// </summary>
+        AltStreamsSize,
+        /// <summary>
+        /// (?)
+        /// </summary>
+        VirtualSize,
+        /// <summary>
+        /// (?)
+        /// </summary>
+        UnpackSize,
+        /// <summary>
+        /// (?)
+        /// </summary>
+        TotalPhySize,
+        /// <summary>
+        /// (?)
+        /// </summary>
+        VolumeIndex,
+        /// <summary>
+        /// (?)
+        /// </summary>
+        SubType,
+        /// <summary>
+        /// (?)
+        /// </summary>
+        ShortComment,
+        /// <summary>
+        /// (?)
+        /// </summary>
+        CodePage,
+        /// <summary>
+        /// (?)
+        /// </summary>
+        IsNotArcType,
+        /// <summary>
+        /// (?)
+        /// </summary>
+        PhySizeCantBeDetected,
+        /// <summary>
+        /// (?)
+        /// </summary>
+        ZerosTailIsAllowed,
+        /// <summary>
+        /// (?)
+        /// </summary>
+        TailSize,
+        /// <summary>
+        /// (?)
+        /// </summary>
+        EmbeddedStubSize,
+        /// <summary>
+        /// (?)
+        /// </summary>
+        NtReparse,
+        /// <summary>
+        /// (?)
+        /// </summary>
+        HardLink,
+        /// <summary>
+        /// (?)
+        /// </summary>
+        INode,
+        /// <summary>
+        /// (?)
+        /// </summary>
+        StreamId,
+        /// <summary>
+        /// (?)
+        /// </summary>
+        ReadOnly,
+        /// <summary>
+        /// (?)
+        /// </summary>
+        OutName,
+        /// <summary>
+        /// (?)
+        /// </summary>
+        CopyLink,
+
         /// <summary>
         /// User defined property; usually absent
         /// </summary>
@@ -686,78 +864,7 @@ namespace SevenZip
         /// <summary>
         /// PropId string names
         /// </summary>
-        public static readonly Dictionary<ItemPropId, string> PropIdNames =
-        #region Initialization
-            new Dictionary<ItemPropId, string>(46)
-            {
-                {ItemPropId.Path, "Path"},
-                {ItemPropId.Name, "Name"},
-                {ItemPropId.IsDirectory, "Folder"},
-                {ItemPropId.Size, "Size"},
-                {ItemPropId.PackedSize, "Packed Size"},
-                {ItemPropId.Attributes, "Attributes"},
-                {ItemPropId.CreationTime, "Created"},
-                {ItemPropId.LastAccessTime, "Accessed"},
-                {ItemPropId.LastWriteTime, "Modified"},
-                {ItemPropId.Solid, "Solid"},
-                {ItemPropId.Commented, "Commented"},
-                {ItemPropId.Encrypted, "Encrypted"},
-                {ItemPropId.SplitBefore, "Split Before"},
-                {ItemPropId.SplitAfter, "Split After"},
-                {
-                    ItemPropId.DictionarySize,
-                    "Dictionary Size"
-                    },
-                {ItemPropId.Crc, "CRC"},
-                {ItemPropId.Type, "Type"},
-                {ItemPropId.IsAnti, "Anti"},
-                {ItemPropId.Method, "Method"},
-                {ItemPropId.HostOS, "Host OS"},
-                {ItemPropId.FileSystem, "File System"},
-                {ItemPropId.User, "User"},
-                {ItemPropId.Group, "Group"},
-                {ItemPropId.Block, "Block"},
-                {ItemPropId.Comment, "Comment"},
-                {ItemPropId.Position, "Position"},
-                {ItemPropId.Prefix, "Prefix"},
-                {
-                    ItemPropId.NumSubDirs,
-                    "Number of subdirectories"
-                    },
-                {
-                    ItemPropId.NumSubFiles,
-                    "Number of subfiles"
-                    },
-                {
-                    ItemPropId.UnpackVersion,
-                    "Unpacker version"
-                    },
-                {ItemPropId.Volume, "Volume"},
-                {ItemPropId.IsVolume, "IsVolume"},
-                {ItemPropId.Offset, "Offset"},
-                {ItemPropId.Links, "Links"},
-                {
-                    ItemPropId.NumBlocks,
-                    "Number of blocks"
-                    },
-                {
-                    ItemPropId.NumVolumes,
-                    "Number of volumes"
-                    },
-                {ItemPropId.TimeType, "Time type"},
-                {ItemPropId.Bit64, "64-bit"},
-                {ItemPropId.BigEndian, "Big endian"},
-                {ItemPropId.Cpu, "CPU"},
-                {
-                    ItemPropId.PhysicalSize,
-                    "Physical Size"
-                    },
-                {ItemPropId.HeadersSize, "Headers Size"},
-                {ItemPropId.Checksum, "Checksum"},
-                {ItemPropId.FreeSpace, "Free Space"},
-                {ItemPropId.ClusterSize, "Cluster Size"}
-            };
-        #endregion
+        public static readonly Dictionary<ItemPropId, string> PropIdNames = Enum.GetValues(typeof(ItemPropId)).Cast<ItemPropId>().ToDictionary(e => e, e => e.ToString());
     }
 
     /// <summary>
@@ -1241,4 +1348,4 @@ namespace SevenZip
         int SetProperties(IntPtr names, IntPtr values, int numProperties);
     }
 #endif
-}
+    }
