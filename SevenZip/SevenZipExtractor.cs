@@ -1445,5 +1445,64 @@ namespace SevenZip
         }
 
         #endregion
+
+
+        /// <summary>
+        /// Unpacks the whole archive to the specified directory.
+        /// </summary>
+        /// <param name="getStreamFunc">A function that will handle the creation of streams that will be populated.</param>
+        public void ExtractArchive(Func<ArchiveFileInfo, Stream> getStreamFunc)
+        {
+            DisposedCheck();
+            ClearExceptions();
+            InitArchiveFileData(false);
+            try
+            {
+                IInStream archiveStream;
+                using ((archiveStream = GetArchiveStream(true)) as IDisposable)
+                {
+                    var openCallback = GetArchiveOpenCallback();
+                    if (!OpenArchive(archiveStream, openCallback))
+                    {
+                        return;
+                    }
+                    try
+                    {
+                        using (var aec = GetArchiveExtractCallback("", (int)_filesCount, null))
+                        {
+                            try
+                            {
+                                aec.GetStreamFunc = getStreamFunc;
+                                CheckedExecute(
+                                    _archive.Extract(null, UInt32.MaxValue, 0, aec),
+                                    SevenZipExtractionFailedException.DEFAULT_MESSAGE, aec);
+                                OnEvent(ExtractionFinished, EventArgs.Empty, false);
+                            }
+                            finally
+                            {
+                                FreeArchiveExtractCallback(aec);
+                            }
+                        }
+                    }
+                    catch (Exception)
+                    {
+                        if (openCallback.ThrowException())
+                        {
+                            throw;
+                        }
+                    }
+                }
+            }
+            finally
+            {
+                if (_archive != null)
+                {
+                    _archive.Close();
+                }
+                _archiveStream = null;
+                _opened = false;
+            }
+            ThrowUserException();
+        }
     }
 }
