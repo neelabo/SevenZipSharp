@@ -376,17 +376,6 @@ Dispatcher == null
             SevenZipLibraryManager.SetLibraryPath(libraryPath);
         }
 #endif
-        /// <summary>
-        /// Gets the current library features.
-        /// </summary>
-        [CLSCompliant(false)]
-        public static LibraryFeature CurrentLibraryFeatures
-        {
-            get
-            {
-                return SevenZipLibraryManager.CurrentLibraryFeatures;
-            }
-        }
 
         /// <summary>
         /// Determines whether the specified System.Object is equal to the current SevenZipBase.
