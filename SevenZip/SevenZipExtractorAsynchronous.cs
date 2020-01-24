@@ -18,6 +18,7 @@ namespace SevenZip
 {
     using System;
     using System.IO;
+    using System.Threading.Tasks;
 #if DOTNET20
     using System.Threading;
 #else
@@ -154,7 +155,8 @@ namespace SevenZip
                 eventPriority
 #endif
             );
-            (new ExtractArchiveDelegate(ExtractArchive)).BeginInvoke(directory, AsyncCallbackImplementation, this);
+            Task.Run(() => new ExtractArchiveDelegate(ExtractArchive).Invoke(directory))
+                .ContinueWith(_ => ReleaseContext());
         }
 
 #if !DOTNET20
@@ -185,7 +187,8 @@ namespace SevenZip
                 eventPriority
 #endif
             );
-            (new ExtractFileByFileNameDelegate(ExtractFile)).BeginInvoke(fileName, stream, AsyncCallbackImplementation, this);
+            Task.Run(() => new ExtractFileByFileNameDelegate(ExtractFile).Invoke(fileName, stream))
+                .ContinueWith(_ => ReleaseContext());
         }
 
 #if !DOTNET20
@@ -216,7 +219,8 @@ namespace SevenZip
                 eventPriority
 #endif
             );
-            (new ExtractFileByIndexDelegate(ExtractFile)).BeginInvoke(index, stream, AsyncCallbackImplementation, this);
+            Task.Run(() => new ExtractFileByIndexDelegate(ExtractFile).Invoke(index, stream))
+                .ContinueWith(_ => ReleaseContext());
         }
 
 #if !DOTNET20
@@ -247,7 +251,8 @@ namespace SevenZip
                 eventPriority
 #endif
             );
-            (new ExtractFiles1Delegate(ExtractFiles)).BeginInvoke(directory, indexes, AsyncCallbackImplementation, this);
+            Task.Run(() => new ExtractFiles1Delegate(ExtractFiles).Invoke(directory, indexes))
+                .ContinueWith(_ => ReleaseContext());
         }
 
 #if !DOTNET20
@@ -278,7 +283,8 @@ namespace SevenZip
                 eventPriority
 #endif
             );
-            (new ExtractFiles2Delegate(ExtractFiles)).BeginInvoke(directory, fileNames, AsyncCallbackImplementation, this);
+            Task.Run(() => new ExtractFiles2Delegate(ExtractFiles).Invoke(directory, fileNames))
+                .ContinueWith(_ => ReleaseContext());
         }
 
 #if !DOTNET20
@@ -311,7 +317,8 @@ namespace SevenZip
                 eventPriority
 #endif
             );
-            (new ExtractFiles3Delegate(ExtractFiles)).BeginInvoke(extractFileCallback, AsyncCallbackImplementation, this);
+            Task.Run(() => new ExtractFiles3Delegate(ExtractFiles).Invoke(extractFileCallback))
+                .ContinueWith(_ => ReleaseContext());
         }
     }
 }

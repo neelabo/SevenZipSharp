@@ -18,9 +18,6 @@ using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Globalization;
-#if !WINCE
-using System.Runtime.Remoting.Messaging;
-#endif
 #if DOTNET20
 using System.Threading;
 #else
@@ -63,23 +60,10 @@ namespace SevenZip
         private readonly int _uniqueID;
         private static readonly List<int> Identificators = new List<int>();
 #if !WINCE
-        internal static readonly AsyncCallback AsyncCallbackImplementation = AsyncCallbackMethod;
-
         /// <summary>
         /// True if the instance of the class needs to be recreated in new thread context; otherwise, false.
         /// </summary>
         protected internal bool NeedsToBeRecreated;
-
-        /// <summary>
-        /// AsyncCallback implementation used in asynchronous invocations.
-        /// </summary>
-        /// <param name="ar">IAsyncResult instance.</param>
-        internal static void AsyncCallbackMethod(IAsyncResult ar)
-        {
-            var result = (AsyncResult)ar;
-            result.AsyncDelegate.GetType().GetMethod("EndInvoke").Invoke(result.AsyncDelegate, new[] { ar });
-            ((SevenZipBase)ar.AsyncState).ReleaseContext();
-        }
 
         virtual internal void SaveContext(
 #if !DOTNET20

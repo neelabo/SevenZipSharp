@@ -18,6 +18,7 @@ namespace SevenZip
 {
     using System.Collections.Generic;
     using System.IO;
+    using System.Threading.Tasks;
 #if DOTNET20
     using System.Threading;
 #else
@@ -82,8 +83,8 @@ namespace SevenZip
                 eventPriority
 #endif
             );
-            (new CompressFiles1Delegate(CompressFiles)).BeginInvoke(archiveName, fileFullNames,
-                AsyncCallbackImplementation, this);
+            Task.Run(() => new CompressFiles1Delegate(CompressFiles).Invoke(archiveName, fileFullNames))
+                .ContinueWith(_ => ReleaseContext());
         }
 
 #if !DOTNET20
@@ -115,8 +116,8 @@ namespace SevenZip
                 eventPriority
 #endif
             );
-            (new CompressFiles2Delegate(CompressFiles)).BeginInvoke(archiveStream, fileFullNames,
-                AsyncCallbackImplementation, this);
+            Task.Run(() => new CompressFiles2Delegate(CompressFiles).Invoke(archiveStream, fileFullNames))
+                .ContinueWith(_ => ReleaseContext());
         }
 
 #if !DOTNET20
@@ -148,8 +149,8 @@ namespace SevenZip
                 eventPriority
 #endif
             );
-            (new CompressFiles3Delegate(CompressFiles)).BeginInvoke(archiveName, commonRootLength, fileFullNames,
-                AsyncCallbackImplementation, this);
+            Task.Run(() => new CompressFiles3Delegate(CompressFiles).Invoke(archiveName, commonRootLength, fileFullNames))
+                .ContinueWith(_ => ReleaseContext());
         }
 
 #if !DOTNET20
@@ -183,8 +184,8 @@ namespace SevenZip
                 eventPriority
 #endif
             );
-            (new CompressFiles4Delegate(CompressFiles)).BeginInvoke(archiveStream, commonRootLength, fileFullNames,
-                AsyncCallbackImplementation, this);
+            Task.Run(() => new CompressFiles4Delegate(CompressFiles).Invoke(archiveStream, commonRootLength, fileFullNames))
+                .ContinueWith(_ => ReleaseContext());
         }
 
 #if !DOTNET20
@@ -216,8 +217,8 @@ namespace SevenZip
                 eventPriority
 #endif
             );
-            (new CompressFilesEncrypted1Delegate(CompressFilesEncrypted)).BeginInvoke(archiveName, password, fileFullNames,
-                AsyncCallbackImplementation, this);
+            Task.Run(() => new CompressFilesEncrypted1Delegate(CompressFilesEncrypted).Invoke(archiveName, password, fileFullNames))
+                .ContinueWith(_ => ReleaseContext());
         }
 
 #if !DOTNET20
@@ -251,8 +252,8 @@ namespace SevenZip
                 eventPriority
 #endif
             );
-            (new CompressFilesEncrypted2Delegate(CompressFilesEncrypted)).BeginInvoke(archiveStream, password, fileFullNames,
-                AsyncCallbackImplementation, this);
+            Task.Run(() => new CompressFilesEncrypted2Delegate(CompressFilesEncrypted).Invoke(archiveStream, password, fileFullNames))
+                .ContinueWith(_ => ReleaseContext());
         }
 
 #if !DOTNET20
@@ -286,8 +287,8 @@ namespace SevenZip
                 eventPriority
 #endif
             );
-            (new CompressFilesEncrypted3Delegate(CompressFilesEncrypted)).BeginInvoke(archiveName, commonRootLength, password,
-                fileFullNames, AsyncCallbackImplementation, this);
+            Task.Run(() => new CompressFilesEncrypted3Delegate(CompressFilesEncrypted).Invoke(archiveName, commonRootLength, password, fileFullNames))
+                .ContinueWith(_ => ReleaseContext());
         }
 
 #if !DOTNET20
@@ -323,8 +324,8 @@ namespace SevenZip
                 eventPriority
 #endif
             );
-            (new CompressFilesEncrypted4Delegate(CompressFilesEncrypted)).BeginInvoke(archiveStream, commonRootLength, password,
-                fileFullNames, AsyncCallbackImplementation, this);
+            Task.Run(() => new CompressFilesEncrypted4Delegate(CompressFilesEncrypted).Invoke(archiveStream, commonRootLength, password, fileFullNames))
+                .ContinueWith(_ => ReleaseContext());
         }
         #endregion
 
@@ -357,8 +358,8 @@ namespace SevenZip
                 eventPriority
 #endif
             );
-            (new CompressDirectory1Delegate(CompressDirectory)).BeginInvoke(directory, archiveName,
-                AsyncCallbackImplementation, this);
+            Task.Run(() => new CompressDirectory1Delegate(CompressDirectory).Invoke(directory, archiveName))
+                .ContinueWith(_ => ReleaseContext());
         }
 
 #if !DOTNET20
@@ -389,8 +390,8 @@ namespace SevenZip
                 eventPriority
 #endif
             );
-            (new CompressDirectory2Delegate(CompressDirectory)).BeginInvoke(directory, archiveStream,
-                AsyncCallbackImplementation, this);
+            Task.Run(() => new CompressDirectory2Delegate(CompressDirectory).Invoke(directory, archiveStream))
+                .ContinueWith(_ => ReleaseContext());
         }
 
 #if !DOTNET20
@@ -421,8 +422,8 @@ namespace SevenZip
                 eventPriority
 #endif
             );
-            (new CompressDirectory3Delegate(CompressDirectory)).BeginInvoke(directory, archiveName,
-                password, AsyncCallbackImplementation, this);
+            Task.Run(() => new CompressDirectory3Delegate(CompressDirectory).Invoke(directory, archiveName, password))
+                .ContinueWith(_ => ReleaseContext());
         }
 
 #if !DOTNET20
@@ -455,8 +456,8 @@ namespace SevenZip
                 eventPriority
 #endif
             );
-            (new CompressDirectory4Delegate(CompressDirectory)).BeginInvoke(directory, archiveStream,
-                password, AsyncCallbackImplementation, this);
+            Task.Run(() => new CompressDirectory4Delegate(CompressDirectory).Invoke(directory, archiveStream, password))
+                .ContinueWith(_ => ReleaseContext());
         }
 #endif
 
@@ -506,8 +507,8 @@ namespace SevenZip
                 eventPriority
 #endif
             );
-            (new CompressDirectory5Delegate(CompressDirectory)).BeginInvoke(directory, archiveName,
-                password, searchPattern, recursion, AsyncCallbackImplementation, this);
+            Task.Run(() => new CompressDirectory5Delegate(CompressDirectory).Invoke(directory, archiveName, password, searchPattern, recursion))
+                .ContinueWith(_ => ReleaseContext());
         }
 
 #if !DOTNET20
@@ -558,8 +559,8 @@ namespace SevenZip
                 eventPriority
 #endif
             );
-            (new CompressDirectory6Delegate(CompressDirectory)).BeginInvoke(directory, archiveStream,
-                password, searchPattern, recursion, AsyncCallbackImplementation, this);
+            Task.Run(() => new CompressDirectory6Delegate(CompressDirectory).Invoke(directory, archiveStream, password, searchPattern, recursion))
+                .ContinueWith(_ => ReleaseContext());
         }
 #endregion
 
@@ -592,7 +593,8 @@ namespace SevenZip
                 eventPriority
 #endif
                 );
-            (new CompressStream1Delegate(CompressStream)).BeginInvoke(inStream, outStream, AsyncCallbackImplementation, this);            
+            Task.Run(() => new CompressStream1Delegate(CompressStream).Invoke(inStream, outStream))
+                .ContinueWith(_ => ReleaseContext());
         }       
 #endif
 
@@ -628,8 +630,8 @@ namespace SevenZip
                 eventPriority
 #endif
                 );
-            (new CompressStream2Delegate(CompressStream)).BeginInvoke(inStream, outStream, password, AsyncCallbackImplementation, this);            
-
+            Task.Run(() => new CompressStream2Delegate(CompressStream).Invoke(inStream, outStream, password))
+                .ContinueWith(_ => ReleaseContext());
         }
         #endregion
         
@@ -660,7 +662,8 @@ namespace SevenZip
                 eventPriority
 #endif
             );
-            (new ModifyArchive1Delegate(ModifyArchive)).BeginInvoke(archiveName, newFileNames, AsyncCallbackImplementation, this);
+            Task.Run(() => new ModifyArchive1Delegate(ModifyArchive).Invoke(archiveName, newFileNames))
+                .ContinueWith(_ => ReleaseContext());
         }
 #endif
 
@@ -698,7 +701,8 @@ namespace SevenZip
                 eventPriority
 #endif
                 );
-            (new ModifyArchive2Delegate(ModifyArchive)).BeginInvoke(archiveName, newFileNames, password, AsyncCallbackImplementation, this);
+            Task.Run(() => new ModifyArchive2Delegate(ModifyArchive).Invoke(archiveName, newFileNames, password))
+                .ContinueWith(_ => ReleaseContext());
         }
         #endregion
     }
