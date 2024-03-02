@@ -130,7 +130,7 @@ namespace SevenZip
             _directory = directory;
             _actualIndexes = actualIndexes;
             _directoryStructure = directoryStructure;
-            if (!directory.EndsWith("" + Path.DirectorySeparatorChar, StringComparison.CurrentCulture))
+            if (!string.IsNullOrEmpty(_directory) && !_directory.EndsWith("" + Path.DirectorySeparatorChar, StringComparison.CurrentCulture))
             {
                 _directory += Path.DirectorySeparatorChar;
             }
@@ -454,7 +454,7 @@ namespace SevenZip
                 {
                     if (!String.IsNullOrEmpty(fileName))
                     {
-                        _fileStream.Dispose();
+                        _fileStream?.Dispose();
                         if (File.Exists(fileName))
                         {
                             try
