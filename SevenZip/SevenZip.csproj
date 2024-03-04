@@ -16,12 +16,12 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <None Update="x64\7z.dll">
+    <Content Include="Libraries\x64\7z.dll">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Update="x86\7z.dll">
+    </Content>
+    <Content Include="Libraries\x86\7z.dll">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
+    </Content>
   </ItemGroup>
 
   <ItemGroup>

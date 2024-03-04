@@ -267,3 +267,5 @@ Backup/
 bin/
 obj/
 /SevenZip/UpgradeLog.htm
+!/SevenZip/Libraries/x64/
+!/SevenZip/Libraries/x86/
