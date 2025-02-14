@@ -146,15 +146,15 @@ namespace SevenZip
                     break;
                 case ItemPropId.CreationTime:
                     value.VarType = VarEnum.VT_FILETIME;
-                    value.Int64Value = _fileInfo.CreationTime.ToFileTime();
+                    value.Int64Value = _fileInfo.GetSafeCreationTime().ToFileTime();
                     break;
                 case ItemPropId.LastAccessTime:
                     value.VarType = VarEnum.VT_FILETIME;
-                    value.Int64Value = _fileInfo.LastAccessTime.ToFileTime();
+                    value.Int64Value = _fileInfo.GetSafeLastAccessTime().ToFileTime();
                     break;
                 case ItemPropId.LastWriteTime:
                     value.VarType = VarEnum.VT_FILETIME;
-                    value.Int64Value = _fileInfo.LastWriteTime.ToFileTime();
+                    value.Int64Value = _fileInfo.GetSafeLastWriteTime().ToFileTime();
                     break;
             }
             return 0;

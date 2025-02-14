@@ -557,7 +557,7 @@ namespace SevenZip
                         {
                             value.Int64Value = _files == null
                                                ? DateTime.Now.ToFileTime()
-                                               : _files[index].CreationTime.ToFileTime();
+                                               : _files[index].GetSafeCreationTime().ToFileTime();
                         }
                         else
                         {
@@ -570,7 +570,7 @@ namespace SevenZip
                         {
                             value.Int64Value = _files == null
                                                ? DateTime.Now.ToFileTime()
-                                               : _files[index].LastAccessTime.ToFileTime();
+                                               : _files[index].GetSafeLastAccessTime().ToFileTime();
                         }
                         else
                         {
@@ -583,7 +583,7 @@ namespace SevenZip
                         {
                             value.Int64Value = _files == null
                                                ? DateTime.Now.ToFileTime()
-                                               : _files[index].LastWriteTime.ToFileTime();
+                                               : _files[index].GetSafeLastWriteTime().ToFileTime();
                         }
                         else
                         {
