@@ -295,6 +295,10 @@ namespace SevenZip
                     case VarEnum.VT_FILETIME:
                         try
                         {
+                            if (Int64Value == 0)
+                            {
+                                return DateTime.MinValue;
+                            }
                             return DateTime.FromFileTime(Int64Value);
                         }
                         catch (ArgumentOutOfRangeException)
