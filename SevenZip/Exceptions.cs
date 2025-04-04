@@ -123,6 +123,17 @@ namespace SevenZip
             SerializationInfo info, StreamingContext context)
             : base(info, context) {}
 #endif
+
+        /// <summary>
+        /// Initializes a new instance of the ExtractionFailedException class
+        /// </summary>
+        /// <param name="operationResult"></param>
+        public ExtractionFailedException(OperationResult operationResult) : base(DEFAULT_MESSAGE, operationResult.ToMessage())
+        {
+            OperationResult = operationResult;
+        }
+
+        public OperationResult OperationResult { get; }
     }
 
 #if COMPRESS

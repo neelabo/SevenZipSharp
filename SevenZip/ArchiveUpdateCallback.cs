@@ -696,18 +696,7 @@ namespace SevenZip
         {
             if (operationResult != OperationResult.Ok && ReportErrors)
             {
-                switch (operationResult)
-                {
-                    case OperationResult.CrcError:
-                        AddException(new ExtractionFailedException("File is corrupted. Crc check has failed."));
-                        break;
-                    case OperationResult.DataError:
-                        AddException(new ExtractionFailedException("File is corrupted. Data error has occured."));
-                        break;
-                    case OperationResult.UnsupportedMethod:
-                        AddException(new ExtractionFailedException("Unsupported method error has occured."));
-                        break;
-                }
+                AddException(new ExtractionFailedException(operationResult));
             }
             if (_fileStream != null)
             {

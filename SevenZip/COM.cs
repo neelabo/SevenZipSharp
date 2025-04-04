@@ -22,21 +22,21 @@ using System.Linq;
 using System.Runtime.InteropServices;
 using System.Security.Permissions;
 #if !WINCE
-using FILETIME=System.Runtime.InteropServices.ComTypes.FILETIME;
+using FILETIME = System.Runtime.InteropServices.ComTypes.FILETIME;
 #elif WINCE
-using FILETIME=OpenNETCF.Runtime.InteropServices.ComTypes.FILETIME;
+using FILETIME = OpenNETCF.Runtime.InteropServices.ComTypes.FILETIME;
 #endif
 
 namespace SevenZip
 {
-    #if UNMANAGED
+#if UNMANAGED
 
     /// <summary>
     /// The structure to fix x64 and x32 variant size mismatch.
     /// </summary>
     [StructLayout(LayoutKind.Sequential)]
     internal struct PropArray
-    {        
+    {
         uint _cElems;
         IntPtr _pElems;
     }
@@ -99,12 +99,12 @@ namespace SevenZip
         {
             private get
             {
-                return (VarEnum) _vt;
+                return (VarEnum)_vt;
             }
 
             set
             {
-                _vt = (ushort) value;
+                _vt = (ushort)value;
             }
         }
 
@@ -344,7 +344,7 @@ namespace SevenZip
         /// <returns>true if the specified System.Object is equal to the current PropVariant; otherwise, false.</returns>
         public override bool Equals(object obj)
         {
-            return (obj is PropVariant) ? Equals((PropVariant) obj) : false;
+            return (obj is PropVariant) ? Equals((PropVariant)obj) : false;
         }
 
         /// <summary>
@@ -445,7 +445,63 @@ namespace SevenZip
         /// <summary>
         /// CrcError has occured
         /// </summary>
-        CrcError
+        CrcError,
+        /// <summary>
+        /// File is unavailable
+        /// </summary>
+        Unavailable,
+        /// <summary>
+        /// Unexpected end of file
+        /// </summary>
+        UnexpectedEnd,
+        /// <summary>
+        /// Data after end of archive
+        /// </summary>
+        DataAfterEnd,
+        /// <summary>
+        /// File is not archive
+        /// </summary>
+        IsNotArc,
+        /// <summary>
+        /// Archive headers error
+        /// </summary>
+        HeadersError,
+        /// <summary>
+        /// Wrong password
+        /// </summary>
+        WrongPassword
+    }
+
+    public static class OperationResultExtensions
+    {
+        public static string ToMessage(this OperationResult operationResult)
+        {
+            switch (operationResult)
+            {
+                case OperationResult.Ok:
+                    return "Operation completed successfully.";
+                case OperationResult.CrcError:
+                    return "File is corrupted. Crc check has failed.";
+                case OperationResult.DataError:
+                    return "File is corrupted. Data error has occured.";
+                case OperationResult.UnsupportedMethod:
+                    return "Unsupported method error has occured.";
+                case OperationResult.Unavailable:
+                    return "File is unavailable.";
+                case OperationResult.UnexpectedEnd:
+                    return "Unexpected end of file.";
+                case OperationResult.DataAfterEnd:
+                    return "Data after end of archive.";
+                case OperationResult.IsNotArc:
+                    return "File is not archive.";
+                case OperationResult.HeadersError:
+                    return "Archive headers error.";
+                case OperationResult.WrongPassword:
+                    return "Wrong password.";
+                default:
+                    return $"Unexpected operation result: {operationResult}";
+            }
+        }
     }
 
     /// <summary>
@@ -1079,7 +1135,7 @@ namespace SevenZip
         int GetStream(
             [MarshalAs(UnmanagedType.LPWStr)] string name,
             [Out, MarshalAs(UnmanagedType.Interface)] out IInStream inStream);
-    }    
+    }
 
     /// <summary>
     /// 7-zip ISequentialInStream imported interface
@@ -1203,9 +1259,9 @@ namespace SevenZip
     /// <summary>
     /// 7-zip essential in archive interface
     /// </summary>
-    [ComImport]  
-	[Guid("23170F69-40C1-278A-0000-000600600000")]
-    [InterfaceType(ComInterfaceType.InterfaceIsIUnknown)]	
+    [ComImport]
+    [Guid("23170F69-40C1-278A-0000-000600600000")]
+    [InterfaceType(ComInterfaceType.InterfaceIsIUnknown)]
     internal interface IInArchive
     {
         /// <summary>
@@ -1352,4 +1408,4 @@ namespace SevenZip
         int SetProperties(IntPtr names, IntPtr values, int numProperties);
     }
 #endif
-    }
+}
