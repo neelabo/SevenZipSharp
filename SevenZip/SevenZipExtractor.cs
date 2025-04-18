@@ -362,6 +362,11 @@ namespace SevenZip
         /// Gets or sets the value indicating whether to preserve the directory structure of extracted files.
         /// </summary>
         public bool PreserveDirectoryStructure { get; set; }
+
+        /// <summary>
+        /// A password was requested during the process.
+        /// </summary>
+        public bool PasswordRequired { get; private set; }
         #endregion                
 
         /// <summary>
@@ -383,9 +388,19 @@ namespace SevenZip
 
         private ArchiveOpenCallback GetArchiveOpenCallback()
         {
-            return _openCallback ?? (_openCallback = String.IsNullOrEmpty(Password)
+            if (_openCallback == null)
+            {
+                _openCallback = String.IsNullOrEmpty(Password)
                                     ? new ArchiveOpenCallback(_fileName)
-                                    : new ArchiveOpenCallback(_fileName, Password));
+                                    : new ArchiveOpenCallback(_fileName, Password);
+                _openCallback.SetPasswordRequired((string password) =>
+                {
+                    PasswordRequired = true;
+                    return password;
+                });
+            }
+
+            return _openCallback;
         }
 
         /// <summary>

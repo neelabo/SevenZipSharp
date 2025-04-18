@@ -25,7 +25,7 @@ using SevenZip.Mono.COM;
 
 namespace SevenZip
 {
-    #if UNMANAGED
+#if UNMANAGED
     /// <summary>
     /// Callback to handle the archive opening
     /// </summary>
@@ -33,9 +33,10 @@ namespace SevenZip
                                                 ICryptoGetTextPassword, IDisposable
     {
         private FileInfo _fileInfo;
-        private Dictionary<string, InStreamWrapper> _wrappers = 
+        private Dictionary<string, InStreamWrapper> _wrappers =
             new Dictionary<string, InStreamWrapper>();
         private readonly List<string> _volumeFileNames = new List<string>();
+        private Func<string, string> _passwordRequired;
 
         /// <summary>
         /// Gets the list of volume file names.
@@ -62,7 +63,7 @@ namespace SevenZip
                 {
                     int index = 2;
                     var baseName = fileName.Substring(0, fileName.Length - 3);
-                    var volName = baseName + (index > 99 ? index.ToString() : 
+                    var volName = baseName + (index > 99 ? index.ToString() :
                         index > 9 ? "0" + index : "00" + index);
                     while (File.Exists(volName))
                     {
@@ -95,6 +96,15 @@ namespace SevenZip
         }
 
         /// <summary>
+        /// Sets the password required callback.
+        /// </summary>
+        /// <param name="passwordRequired">Callback to be called when the password is required.</param>
+        public void SetPasswordRequired(Func<string, string> passwordRequired)
+        {
+            _passwordRequired = passwordRequired;
+        }
+
+        /// <summary>
         /// Reset multi volume info.
         /// </summary>
         public void ResetMultiVolume()
@@ -116,9 +126,9 @@ namespace SevenZip
 
         #region IArchiveOpenCallback Members
 
-        public void SetTotal(IntPtr files, IntPtr bytes) {}
+        public void SetTotal(IntPtr files, IntPtr bytes) { }
 
-        public void SetCompleted(IntPtr files, IntPtr bytes) {}
+        public void SetCompleted(IntPtr files, IntPtr bytes) { }
 
         #endregion
 
@@ -134,15 +144,15 @@ namespace SevenZip
                     break;
                 case ItemPropId.IsDirectory:
                     value.VarType = VarEnum.VT_BOOL;
-                    value.UInt64Value = (byte) (_fileInfo.Attributes & FileAttributes.Directory);
+                    value.UInt64Value = (byte)(_fileInfo.Attributes & FileAttributes.Directory);
                     break;
                 case ItemPropId.Size:
                     value.VarType = VarEnum.VT_UI8;
-                    value.UInt64Value = (UInt64) _fileInfo.Length;
+                    value.UInt64Value = (UInt64)_fileInfo.Length;
                     break;
                 case ItemPropId.Attributes:
                     value.VarType = VarEnum.VT_UI4;
-                    value.UInt32Value = (uint) _fileInfo.Attributes;
+                    value.UInt32Value = (uint)_fileInfo.Attributes;
                     break;
                 case ItemPropId.CreationTime:
                     value.VarType = VarEnum.VT_FILETIME;
@@ -184,7 +194,7 @@ namespace SevenZip
                     var wrapper = new InStreamWrapper(
                         new FileStream(name, FileMode.Open, FileAccess.Read, FileShare.ReadWrite), true);
                     _wrappers.Add(name, wrapper);
-                    inStream = wrapper;                    
+                    inStream = wrapper;
                 }
                 catch (Exception)
                 {
@@ -207,7 +217,15 @@ namespace SevenZip
         /// <returns>Zero if everything is OK</returns>
         public int CryptoGetTextPassword(out string password)
         {
-            password = Password;
+            if (_passwordRequired != null)
+            {
+                password = _passwordRequired.Invoke(Password);
+            }
+            else
+            {
+                password = Password;
+            }
+
             return 0;
         }
 
